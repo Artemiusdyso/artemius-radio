@@ -32,8 +32,12 @@ alter table public.radio_tracks enable row level security;
 grant select on public.radio_tracks to anon, authenticated;
 grant insert, update, delete on public.radio_tracks to authenticated;
 
-create policy "Anyone can read published radio tracks"
-on public.radio_tracks for select to anon, authenticated
+create policy "Public can read published radio tracks"
+on public.radio_tracks for select to anon
+using (is_published = true);
+
+create policy "Admins can read all radio tracks"
+on public.radio_tracks for select to authenticated
 using (is_published = true or exists (
   select 1 from public.radio_admins a where a.user_id = (select auth.uid())
 ));
