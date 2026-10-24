@@ -14,6 +14,7 @@
   const fmt = s => { if (!Number.isFinite(s)) return "00:00"; const m=Math.floor(s/60); return String(m).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0"); };
   let tracks = [], current = -1, supabase = null;
   document.getElementById("year").textContent = new Date().getFullYear();
+  message.textContent = "Mobile diagnostic v5 loaded — connecting to library…";
   audio.volume = Number(volume.value);
   volume.addEventListener("input", () => audio.volume = Number(volume.value));
   function setPlaying(playing){
