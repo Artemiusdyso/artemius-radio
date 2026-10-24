@@ -101,3 +101,7 @@ body { font-family: var(--font); font-size: 16px; }
 .brand-logo{width:46px;height:34px;object-fit:contain;object-position:left center;border-radius:3px;flex-shrink:0}
 .orbital-art.logo-art{aspect-ratio:1200/700}
 .orbital-art.logo-art img{object-fit:cover}
+
+/* Hide hero artwork panel as requested */
+.orbital-art.logo-art { display:none !important; }
+.hero { grid-template-columns:1fr; }
