@@ -23,32 +23,80 @@
     if(card) card.classList.toggle("is-playing",playing);
     document.body.classList.toggle("radio-playing",playing);
   }
-  async function play(index){
-    if (!tracks.length) { message.textContent="The library will be available once the Studio is configured."; return; }
-    current=(index+tracks.length)%tracks.length; const t=tracks[current];
-    audio.src=t.audio_url; title.textContent=t.title; artist.textContent=t.artist||"Artemius Radio"; cover.src=t.cover_url||"assets/cover-placeholder.svg";
-    document.querySelectorAll(".track-row").forEach((el,i)=>el.classList.toggle("current",i===current));
-    message.textContent="Loading track…";
-    try { await audio.play(); setPlaying(true); message.textContent="Now playing"; } catch(e) { setPlaying(false); message.textContent = e && e.name === "NotAllowedError" ? "Tap Play to allow audio playback on this device." : "Playback failed. Check your connection or try another track."; console.warn("Artemius Radio playback error:", e); }
+  function play(index){
+    if (!tracks.length) {
+      message.textContent = "No published tracks are available yet. Please try again in a moment.";
+      load();
+      return;
+    }
+    current = (index + tracks.length) % tracks.length;
+    const t = tracks[current];
+    setPlaying(false);
+    audio.pause();
+    audio.src = t.audio_url;
+    audio.volume = Number(volume.value);
+    title.textContent = t.title;
+    artist.textContent = t.artist || "Artemius Radio";
+    cover.src = t.cover_url || "assets/cover-placeholder.svg";
+    document.querySelectorAll(".track-row").forEach((el, i) => el.classList.toggle("current", i === current));
+    message.textContent = "Loading track…";
+    audio.load();
+    const attempt = audio.play();
+    if (attempt && typeof attempt.then === "function") {
+      attempt.then(() => {
+        if (!audio.paused) {
+          setPlaying(true);
+          message.textContent = "Now playing";
+        }
+      }).catch(e => {
+        setPlaying(false);
+        message.textContent = e && e.name === "NotAllowedError"
+          ? "Tap Play once more to allow audio playback."
+          : "Playback failed. Check your connection or audio file.";
+        console.warn("Artemius Radio playback error:", e, audio.error);
+      });
+    }
   }
-  playBtn.addEventListener("click", async () => {
-    if (!audio.paused) { audio.pause(); setPlaying(false); return; }
-    if (current < 0) { await play(0); return; }
-    try { await audio.play(); setPlaying(true); message.textContent = "Now playing"; }
-    catch (e) { setPlaying(false); message.textContent = e && e.name === "NotAllowedError" ? "Tap Play to allow audio playback on this device." : "Playback failed. Check your connection or try another track."; console.warn("Artemius Radio playback error:", e); }
+  playBtn.addEventListener("click", () => {
+    if (!audio.paused && !audio.ended) {
+      audio.pause();
+      setPlaying(false);
+      message.textContent = "Playback paused";
+      return;
+    }
+    if (current < 0) {
+      play(0);
+      return;
+    }
+    const attempt = audio.play();
+    if (attempt && typeof attempt.then === "function") {
+      attempt.then(() => {
+        setPlaying(true);
+        message.textContent = "Now playing";
+      }).catch(e => {
+        setPlaying(false);
+        message.textContent = e && e.name === "NotAllowedError"
+          ? "Tap Play once more to allow audio playback."
+          : "Playback failed. Check your connection or audio file.";
+        console.warn("Artemius Radio playback error:", e, audio.error);
+      });
+    }
   });
   document.getElementById("prev-track").addEventListener("click",()=>tracks.length&&play(current<=0?tracks.length-1:current-1));
   document.getElementById("next-track").addEventListener("click",()=>tracks.length&&play(current+1));
-  if (allTracksBtn) allTracksBtn.addEventListener("click", async () => {
+  if (allTracksBtn) allTracksBtn.addEventListener("click", () => {
     allTracksBtn.classList.add("active");
     allTracksBtn.setAttribute("aria-pressed", "true");
-    await load();
     document.getElementById("library").scrollIntoView({ behavior: "smooth", block: "start" });
+    allTracksBtn.textContent = "All tracks ✓";
+    window.setTimeout(() => { allTracksBtn.textContent = "All tracks"; }, 1200);
   });
   audio.addEventListener("timeupdate",()=>{seek.value=audio.duration?audio.currentTime/audio.duration*100:0;document.getElementById("current-time").textContent=fmt(audio.currentTime);document.getElementById("duration").textContent=fmt(audio.duration);});
   seek.addEventListener("input",()=>{if(audio.duration)audio.currentTime=Number(seek.value)/100*audio.duration;});
+  audio.addEventListener("playing",()=>{setPlaying(true);message.textContent="Now playing";});
+  audio.addEventListener("waiting",()=>{message.textContent="Buffering audio…";});
   audio.addEventListener("ended",()=>tracks.length&&play(current+1));
-  audio.addEventListener("error",()=>{setPlaying(false);message.textContent="This file cannot be played. Please check its storage.";});
+  audio.addEventListener("error",()=>{setPlaying(false);const err=audio.error;message.textContent=err?"Audio error ("+err.code+"). Try another track or reload the page.":"This file cannot be played. Please check your connection.";console.warn("Artemius Radio audio element error:",err);});
   function render(){
     count.textContent=tracks.length+" TRACK"+(tracks.length>1?"S":"");
     if(!tracks.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">♫</div><h3>The silence before the first note.</h3><p>Add tracks through the Admin Studio. They will appear here as soon as they are published.</p></div>';return;}
