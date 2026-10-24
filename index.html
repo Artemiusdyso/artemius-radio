@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="styles.css?v=13">
 </head>
 <body>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
@@ -34,7 +34,7 @@
           <div class="player-status"><span class="status-light"></span><span id="player-message">Ready to stream your creations.</span><span class="format-label">MP3 / STREAM</span></div>
         </div>
       </div>
-      <audio id="audio-player" preload="metadata" crossorigin="anonymous"></audio>
+      <audio id="audio-player" preload="metadata" playsinline crossorigin="anonymous"></audio>
     </section>
     <section class="universe-section" id="universe">
       <div class="universe-copy"><p class="eyebrow">A UNIVERSE IN SOUND</p><h2>More than a playlist.<br><em>A world to explore.</em></h2><p>From electronic pulses to immersive soundscapes, every track opens a door. Artemius Radio brings together the musical creations of Artemius and Léa & Artemius in one space, made for listening and discovery.</p><a class="text-link" href="https://www.youtube.com/@LeaetArtemius" target="_blank" rel="noopener">Discover Léa & Artemius ↗</a></div>
@@ -42,7 +42,7 @@
     </section>
     <section class="library-section" id="library">
       <div class="section-heading"><div><p class="eyebrow">THE SOUND LIBRARY</p><h2>The Library</h2><p class="muted">Published tracks will appear here automatically.</p></div><span class="section-index" id="track-count">0 TRACK</span></div>
-      <div class="filter-row"><span class="filter-chip active">All tracks</span><span class="library-hint">Choose a track to start listening</span></div>
+      <div class="filter-row"><button id="all-tracks" class="filter-chip active" type="button" aria-pressed="true">All tracks</button><span class="library-hint">Choose a track to start listening</span></div>
       <div id="track-list" class="track-list"><div class="empty-state"><div class="empty-icon">♫</div><h3>The silence before the first note.</h3><p>Tracks will appear here once the database is configured and they have been added through the Studio.</p></div></div>
     </section>
     <section class="cta-strip"><div><p class="eyebrow">INDEPENDENT SOUND · INFINITE CURIOSITY</p><h2>Sound is a portal.</h2></div><a class="button button-outline" href="https://leaartemius.bandcamp.com/" target="_blank" rel="noopener">Explorer Bandcamp ↗</a></section>
