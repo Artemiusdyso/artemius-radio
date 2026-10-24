@@ -26,8 +26,10 @@
   }
   function play(index){
     if (!tracks.length) {
-      message.textContent = "No published tracks are available yet. Please try again in a moment.";
-      load();
+      // Keep the diagnostic visible; repeated taps must not overwrite it or start duplicate requests.
+      if (!/error|unavailable|failed|network/i.test(message.textContent)) {
+        message.textContent = "Library is still loading. If this message remains, reload the page once.";
+      }
       return;
     }
     current = (index + tracks.length) % tracks.length;
