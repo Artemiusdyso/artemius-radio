@@ -28,7 +28,7 @@
     audio.src=t.audio_url; title.textContent=t.title; artist.textContent=t.artist||"Artemius Radio"; cover.src=t.cover_url||"assets/cover-placeholder.svg";
     document.querySelectorAll(".track-row").forEach((el,i)=>el.classList.toggle("current",i===current));
     message.textContent="Loading track…";
-    try { await audio.play(); setPlaying(true); message.textContent="Lecture en cours"; } catch(e) { setPlaying(false); message.textContent="Press Play to start listening."; }
+    try { await audio.play(); setPlaying(true); message.textContent="Now playing"; } catch(e) { setPlaying(false); message.textContent="Press Play to start listening."; }
   }
   playBtn.addEventListener("click",()=>{if(audio.paused){if(current<0){play(0)}else{audio.play().then(()=>setPlaying(true)).catch(()=>message.textContent="Unable to play this file.");}}else{audio.pause();setPlaying(false);}});
   document.getElementById("prev-track").addEventListener("click",()=>tracks.length&&play(current<=0?tracks.length-1:current-1));
@@ -38,8 +38,8 @@
   audio.addEventListener("ended",()=>tracks.length&&play(current+1));
   audio.addEventListener("error",()=>{setPlaying(false);message.textContent="This file cannot be played. Please check its storage.";});
   function render(){
-    count.textContent=tracks.length+" TITRE"+(tracks.length>1?"S":"");
-    if(!tracks.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">♫</div><h3>Le silence avant la première note.</h3><p>Ajoute tes morceaux depuis le Studio d’administration. Ils apparaîtront ici dès qu’ils seront publiés.</p></div>';return;}
+    count.textContent=tracks.length+" TRACK"+(tracks.length>1?"S":"");
+    if(!tracks.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">♫</div><h3>The silence before the first note.</h3><p>Add tracks through the Admin Studio. They will appear here as soon as they are published.</p></div>';return;}
     list.innerHTML="";
     tracks.forEach((t,i)=>{const row=document.createElement("button");row.type="button";row.className="track-row";row.setAttribute("aria-label","Listen to "+t.title);
       const img=document.createElement("img");img.className="track-thumb";img.src=t.cover_url||"assets/cover-placeholder.svg";img.alt="";
@@ -50,12 +50,12 @@
   }
   function playTrack(i){play(i);}
   async function load(){
-    if(!cfg.supabaseUrl||!cfg.supabaseAnonKey||!window.supabase){message.textContent="Le lecteur est prêt. La base de données reste à connecter.";return;}
+    if(!cfg.supabaseUrl||!cfg.supabaseAnonKey||!window.supabase){message.textContent="The player is ready. The database still needs to be connected.";return;}
     supabase=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
     const {data,error}=await supabase.from("radio_tracks").select("id,title,artist,genre,audio_path,cover_path,duration_seconds,created_at").eq("is_published",true).order("sort_order",{ascending:true}).order("created_at",{ascending:false});
     if(error){console.error(error);message.textContent="The library is temporarily unavailable.";return;}
     tracks=(data||[]).map(t=>({...t,audio_url:supabase.storage.from(cfg.audioBucket||"radio-audio").getPublicUrl(t.audio_path).data.publicUrl,cover_url:t.cover_path?supabase.storage.from(cfg.coversBucket||"radio-covers").getPublicUrl(t.cover_path).data.publicUrl:null}));
-    render(); message.textContent=tracks.length?"Prêt à diffuser tes créations.":"The Studio has not published any tracks yet.";
+    render(); message.textContent=tracks.length?"Ready to stream your creations.":"The Studio has not published any tracks yet.";
   }
   render(); load();
 })();
