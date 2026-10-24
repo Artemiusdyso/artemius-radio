@@ -1,37 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
-<title id="title">Léa &amp; Artemius — univers sonore</title><desc id="desc">Monogramme doré et planète turquoise sur fond spatial bleu nuit.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-labelledby="t d">
+<title id="t">Léa &amp; Artemius Radio</title><desc id="d">Logo doré Léa et Artemius, planète turquoise, orbites et ciel étoilé.</desc>
 <defs>
- <radialGradient id="bg"><stop stop-color="#102d39"/><stop offset=".55" stop-color="#07131f"/><stop offset="1" stop-color="#05070d"/></radialGradient>
- <radialGradient id="planet" cx=".28" cy=".22" r=".85"><stop stop-color="#9dffe8"/><stop offset=".18" stop-color="#42cbb9"/><stop offset=".52" stop-color="#116b76"/><stop offset=".78" stop-color="#092d3c"/><stop offset="1" stop-color="#030910"/></radialGradient>
- <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0c8"/><stop offset=".3" stop-color="#b98b52"/><stop offset=".58" stop-color="#fff0cf"/><stop offset="1" stop-color="#7d532c"/></linearGradient>
- <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a3fff1" stop-opacity=".1"/><stop offset=".48" stop-color="#6ae9e2"/><stop offset=".72" stop-color="#d7b78b"/><stop offset="1" stop-color="#a3fff1" stop-opacity=".12"/></linearGradient>
- <filter id="glow"><feGaussianBlur stdDeviation="9"/></filter>
- <clipPath id="clip"><circle cx="830" cy="320" r="165"/></clipPath>
+ <radialGradient id="bg" cx="55%" cy="35%" r="80%"><stop stop-color="#102b36"/><stop offset=".55" stop-color="#050d16"/><stop offset="1" stop-color="#03060c"/></radialGradient>
+ <radialGradient id="p" cx="28%" cy="23%" r="85%"><stop stop-color="#9affec"/><stop offset=".2" stop-color="#42d3c0"/><stop offset=".5" stop-color="#126a75"/><stop offset=".8" stop-color="#062737"/><stop offset="1" stop-color="#02060d"/></radialGradient>
+ <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff1d2"/><stop offset=".25" stop-color="#bb8b4f"/><stop offset=".5" stop-color="#ffebc5"/><stop offset=".78" stop-color="#a8733b"/><stop offset="1" stop-color="#fbe2b2"/></linearGradient>
+ <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#9167ff" stop-opacity="0"/><stop offset=".35" stop-color="#58dff1"/><stop offset=".52" stop-color="#d6c7ff"/><stop offset=".75" stop-color="#8b62ed"/><stop offset="1" stop-color="#8b62ed" stop-opacity="0"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="18"/></filter>
 </defs>
-<rect width="1200" height="720" rx="22" fill="url(#bg)"/>
-<g fill="#c8e8ff" opacity=".8">
- <circle cx="80" cy="85" r="1.8"/><circle cx="155" cy="200" r="1.2"/><circle cx="310" cy="78" r="1.4"/><circle cx="490" cy="125" r="1.6"/><circle cx="1100" cy="115" r="1.8"/><circle cx="1050" cy="540" r="1.4"/><circle cx="680" cy="620" r="1.2"/><circle cx="90" cy="570" r="1.7"/><circle cx="1140" cy="360" r="1.1"/><circle cx="630" cy="80" r="1.2"/>
+<rect width="1200" height="700" rx="18" fill="url(#bg)"/>
+<g fill="#d7e8ff"><circle cx="76" cy="76" r="2"/><circle cx="145" cy="180" r="1.5"/><circle cx="255" cy="90" r="1.5"/><circle cx="410" cy="60" r="2"/><circle cx="610" cy="100" r="1.5"/><circle cx="760" cy="70" r="1.2"/><circle cx="1090" cy="85" r="2"/><circle cx="1130" cy="220" r="1.5"/><circle cx="1000" cy="590" r="2"/><circle cx="130" cy="555" r="1.5"/><circle cx="1040" cy="430" r="1.3"/><circle cx="70" cy="350" r="1.5"/><circle cx="720" cy="620" r="1.5"/></g>
+<path d="M0 560 Q250 520 480 590 T900 570 T1200 545 V700 H0Z" fill="#07121d"/>
+<path d="M0 560 Q250 520 480 590 T900 570 T1200 545" fill="none" stroke="#4bcbdc" stroke-width="3" opacity=".8"/>
+<path d="M0 570 Q250 535 480 605 T900 585 T1200 560" fill="none" stroke="#8d65e9" stroke-width="2" opacity=".6"/>
+<ellipse cx="870" cy="300" rx="300" ry="100" transform="rotate(-24 870 300)" fill="none" stroke="#6de5df" stroke-width="2" opacity=".7"/>
+<ellipse cx="870" cy="300" rx="330" ry="150" transform="rotate(29 870 300)" fill="none" stroke="#b7dcf6" stroke-width="1.5" opacity=".8"/>
+<ellipse cx="870" cy="300" rx="250" ry="205" transform="rotate(-8 870 300)" fill="none" stroke="#e4c9a4" stroke-width="1.5" stroke-dasharray="3 10" opacity=".65"/>
+<circle cx="870" cy="300" r="185" fill="#43d9ca" opacity=".18" filter="url(#glow)"/><circle cx="870" cy="300" r="165" fill="url(#p)"/>
+<path d="M695 315 Q860 245 1037 278 M700 355 Q870 286 1035 320" fill="none" stroke="#8ff8e8" stroke-width="2" opacity=".55"/>
+<circle cx="1070" cy="115" r="19" fill="#bba8ff"/><circle cx="1070" cy="115" r="37" fill="#a18aff" opacity=".2" filter="url(#glow)"/>
+<g transform="translate(120 82)">
+ <path d="M210 35 C92 15 35 110 42 215 C48 315 115 365 220 350 C133 318 99 253 102 185 C105 115 144 61 210 35Z" fill="url(#g)"/>
+ <path d="M145 85 L218 35 L335 350 L291 350 L220 135 L158 350 L116 350 L190 103Z" fill="url(#g)"/>
+ <path d="M285 115 C350 120 374 163 360 225 C350 276 323 309 285 324" fill="none" stroke="url(#g)" stroke-width="2"/>
+ <path d="M220 8 V39 M220 350 V390" stroke="url(#g)" stroke-width="1.5"/><circle cx="220" cy="0" r="5" fill="#e9c28b"/><circle cx="220" cy="400" r="5" fill="#e9c28b"/>
+ <path d="M220 150 L230 178 L258 188 L230 198 L220 226 L210 198 L182 188 L210 178Z" fill="url(#g)"/>
 </g>
-<path d="M0 600 Q300 530 600 620 T1200 570 V720 H0Z" fill="#08141e"/><path d="M0 600 Q300 530 600 620 T1200 570" fill="none" stroke="#2a8794" stroke-width="2" opacity=".7"/>
-<g fill="none" stroke="url(#ring)">
- <ellipse cx="830" cy="320" rx="300" ry="92" transform="rotate(-23 830 320)" stroke-width="2"/>
- <ellipse cx="830" cy="320" rx="270" ry="155" transform="rotate(31 830 320)" stroke-width="1.5" opacity=".75"/>
- <ellipse cx="830" cy="320" rx="220" ry="190" transform="rotate(-7 830 320)" stroke-dasharray="3 10" opacity=".65"/>
-</g>
-<circle cx="830" cy="320" r="175" fill="#39d6c2" opacity=".13" filter="url(#glow)"/>
-<circle cx="830" cy="320" r="165" fill="url(#planet)"/>
-<g clip-path="url(#clip)" fill="none" stroke="#8cf9e8" opacity=".45">
- <path d="M630 320 Q810 245 1020 282" stroke-width="2"/><path d="M635 360 Q810 285 1024 320" stroke-width="1.2"/><path d="M665 408 Q840 342 1010 367" stroke-width="1"/>
-</g>
-<circle cx="1050" cy="130" r="13" fill="#b9a7ff"/><circle cx="1050" cy="130" r="26" fill="#a18aff" opacity=".2" filter="url(#glow)"/>
-<g transform="translate(95 130)">
- <path d="M185 20 C75 15 30 90 32 185 C34 285 106 340 210 330 C125 300 90 240 91 175 C91 103 121 53 185 20Z" fill="url(#gold)"/>
- <path d="M108 70 L195 18 L290 300 L252 300 L191 110 L135 300 L96 300 L166 89Z" fill="url(#gold)" opacity=".98"/>
- <path d="M245 85 C310 90 325 135 318 195 C312 250 285 278 248 290" fill="none" stroke="url(#gold)" stroke-width="2"/>
- <path d="M192 -5 V28 M192 300 V345" stroke="url(#gold)" stroke-width="1.2"/><circle cx="192" cy="-13" r="4" fill="#caa06b"/><circle cx="192" cy="354" r="4" fill="#caa06b"/>
- <path d="M192 132 L200 160 L228 168 L200 176 L192 204 L184 176 L156 168 L184 160Z" fill="url(#gold)"/>
-</g>
-<text x="98" y="555" fill="#f5e4c7" font-family="Georgia,serif" font-size="43" letter-spacing="8">LÉA &amp; ARTEMIUS</text>
-<path d="M220 585 H450 M500 585 H730" stroke="url(#gold)" stroke-width="1.5"/><path d="M475 566 L483 585 L475 604 L467 585Z" fill="url(#gold)"/>
-<text x="100" y="645" fill="#83dcd7" font-family="Arial,sans-serif" font-size="12" letter-spacing="4">SOUND BEYOND THE VISIBLE</text>
+<text x="92" y="500" fill="#f8e9d1" font-family="Georgia,serif" font-size="52" letter-spacing="8">LÉA &amp; ARTEMIUS</text>
+<path d="M90 535 H395 M515 535 H810" stroke="url(#g)" stroke-width="1.8"/><path d="M455 512 L466 535 L455 558 L444 535Z" fill="url(#g)"/>
+<text x="450" y="590" fill="#f7e5c8" font-family="Georgia,serif" font-size="38" letter-spacing="14">R A D I O</text>
+<g stroke="url(#wave)" stroke-width="3"><path d="M130 625 v12 M150 615 v32 M170 605 v52 M190 617 v28 M210 600 v62 M230 620 v22 M250 610 v42 M270 622 v18 M290 614 v34 M310 623 v16 M330 612 v38 M350 620 v22 M370 605 v52 M390 617 v28 M410 610 v42 M430 595 v72 M450 610 v42 M470 582 v98 M490 610 v42 M510 620 v22 M530 612 v38 M550 605 v52 M570 620 v22 M590 610 v42 M610 618 v26 M630 600 v62 M650 615 v32 M670 605 v52 M690 620 v22 M710 612 v38 M730 622 v18 M750 608 v46 M770 617 v28 M790 603 v56 M810 615 v32 M830 623 v16 M850 610 v42 M870 620 v22 M890 612 v38 M910 622 v18 M930 615 v32 M950 620 v22 M970 613 v36 M990 623 v16 M1010 616 v30 M1030 622 v18 M1050 617 v28"/></g>
+<text x="600" y="675" text-anchor="middle" fill="#b7b3d7" font-family="Georgia,serif" font-size="13" letter-spacing="5">CINEMATIC · AMBIENT · ELECTRONIC · SPIRITUAL</text>
 </svg>
