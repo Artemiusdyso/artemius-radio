@@ -89,16 +89,27 @@
   document.getElementById("prev-track").addEventListener("click",()=>tracks.length&&play(current<=0?tracks.length-1:current-1));
   document.getElementById("next-track").addEventListener("click",()=>tracks.length&&play(current+1));
   if (allTracksBtn) {
+    allTracksBtn.setAttribute("aria-expanded", "false");
     allTracksBtn.addEventListener("click", () => {
-      allTracksBtn.classList.add("active");
-      allTracksBtn.setAttribute("aria-pressed", "true");
-      library.classList.remove("library-hidden-until-open");
-      library.scrollIntoView({ behavior: "auto", block: "start" });
-      list.classList.remove("tracks-highlight");
-      void list.offsetWidth;
-      list.classList.add("tracks-highlight");
-      allTracksBtn.textContent = "Showing all tracks ✓";
-      window.setTimeout(() => { allTracksBtn.textContent = "All tracks"; list.classList.remove("tracks-highlight"); }, 1800);
+      const isOpen = !library.classList.contains("library-hidden-until-open");
+      if (isOpen) {
+        library.classList.add("library-hidden-until-open");
+        allTracksBtn.classList.remove("active");
+        allTracksBtn.setAttribute("aria-pressed", "false");
+        allTracksBtn.setAttribute("aria-expanded", "false");
+        allTracksBtn.textContent = "All tracks";
+      } else {
+        library.classList.remove("library-hidden-until-open");
+        allTracksBtn.classList.add("active");
+        allTracksBtn.setAttribute("aria-pressed", "true");
+        allTracksBtn.setAttribute("aria-expanded", "true");
+        library.scrollIntoView({ behavior: "auto", block: "start" });
+        list.classList.remove("tracks-highlight");
+        void list.offsetWidth;
+        list.classList.add("tracks-highlight");
+        allTracksBtn.textContent = "Hide tracks ✕";
+        window.setTimeout(() => list.classList.remove("tracks-highlight"), 1800);
+      }
     });
   }
   audio.addEventListener("timeupdate",()=>{seek.value=audio.duration?audio.currentTime/audio.duration*100:0;document.getElementById("current-time").textContent=fmt(audio.currentTime);document.getElementById("duration").textContent=fmt(audio.duration);});
