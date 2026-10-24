@@ -129,10 +129,20 @@
       return;
     }
     supabase=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
-    const {data,error}=await supabase.from("radio_tracks").select("id,title,artist,genre,audio_path,cover_path,duration_seconds,created_at").eq("is_published",true).order("sort_order",{ascending:true}).order("created_at",{ascending:false});
-    if(error){console.error(error);message.textContent="The library is temporarily unavailable.";return;}
-    tracks=(data||[]).map(t=>({...t,audio_url:supabase.storage.from(cfg.audioBucket||"radio-audio").getPublicUrl(t.audio_path).data.publicUrl,cover_url:t.cover_path?supabase.storage.from(cfg.coversBucket||"radio-covers").getPublicUrl(t.cover_path).data.publicUrl:null}));
-    render(); message.textContent=tracks.length?"Ready to stream your creations.":"The Studio has not published any tracks yet.";
+    try {
+      const {data,error}=await supabase.from("radio_tracks").select("id,title,artist,genre,audio_path,cover_path,duration_seconds,created_at").eq("is_published",true).order("sort_order",{ascending:true}).order("created_at",{ascending:false});
+      if(error){
+        console.error("Artemius Radio library query failed:",error);
+        const detail=[error.code,error.message].filter(Boolean).join(" — ");
+        message.textContent="Library connection error: "+(detail||"request failed")+".";
+        return;
+      }
+      tracks=(data||[]).map(t=>({...t,audio_url:supabase.storage.from(cfg.audioBucket||"radio-audio").getPublicUrl(t.audio_path).data.publicUrl,cover_url:t.cover_path?supabase.storage.from(cfg.coversBucket||"radio-covers").getPublicUrl(t.cover_path).data.publicUrl:null}));
+      render(); message.textContent=tracks.length?"Ready to stream your creations.":"The Studio has not published any tracks yet.";
+    } catch(e) {
+      console.error("Artemius Radio library request crashed:",e);
+      message.textContent="Library network error: "+((e&&e.message)||"check your mobile connection")+".";
+    }
   }
   render(); load();
 })();
