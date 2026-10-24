@@ -21,3 +21,31 @@
 .track-row .track-info span{color:#b9afd4}
 .track-row .track-tag{color:#c4b3f1}
 .track-row .track-play{background:linear-gradient(145deg,rgba(190,145,255,.18),rgba(125,91,211,.12));border-color:rgba(190,145,255,.38);color:#d4baff}
+
+
+/* Strong override: keep library tracks in Artemius violet, never browser-white */
+#track-list .track-row,
+.track-list > .track-row,
+button.track-row {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background: linear-gradient(110deg, #392052 0%, #292043 48%, #151a2a 100%) !important;
+  color: #f6f0ff !important;
+  border: 1px solid rgba(183, 143, 255, .34) !important;
+  border-top-color: rgba(211, 185, 255, .25) !important;
+  box-shadow: inset 4px 0 0 #9564d9 !important;
+}
+#track-list .track-row:hover,
+#track-list .track-row.current,
+.track-list > .track-row:hover,
+.track-list > .track-row.current,
+button.track-row:hover,
+button.track-row.current {
+  background: linear-gradient(110deg, #59327f 0%, #3a2b61 48%, #1c2035 100%) !important;
+  border-color: rgba(201, 168, 255, .62) !important;
+  box-shadow: inset 4px 0 0 #c09aff, 0 6px 24px rgba(91, 48, 150, .2) !important;
+}
+#track-list .track-info strong { color: #fbf8ff !important; }
+#track-list .track-info span { color: #c8bbdf !important; }
+#track-list .track-tag { color: #cbb4ff !important; }
+#track-list .track-play { background: rgba(176, 131, 255, .14) !important; border-color: rgba(196, 163, 255, .48) !important; color: #d9c4ff !important; }
