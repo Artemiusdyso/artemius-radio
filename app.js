@@ -86,8 +86,13 @@
       });
     }
   });
+  function playRandomNext(){
+    if (tracks.length < 2) { if (tracks.length === 1) play(0); return; }
+    const choices = tracks.map((_, i) => i).filter(i => i !== current);
+    play(choices[Math.floor(Math.random() * choices.length)]);
+  }
   document.getElementById("prev-track").addEventListener("click",()=>tracks.length&&play(current<=0?tracks.length-1:current-1));
-  document.getElementById("next-track").addEventListener("click",()=>tracks.length&&play(current+1));
+  document.getElementById("next-track").addEventListener("click",playRandomNext);
   if (allTracksBtn) {
     allTracksBtn.setAttribute("aria-expanded", "false");
     allTracksBtn.addEventListener("click", () => {
@@ -116,7 +121,7 @@
   seek.addEventListener("input",()=>{if(audio.duration)audio.currentTime=Number(seek.value)/100*audio.duration;});
   audio.addEventListener("playing",()=>{setPlaying(true);message.textContent="Now playing";});
   audio.addEventListener("waiting",()=>{message.textContent="Buffering audio…";});
-  audio.addEventListener("ended",()=>tracks.length&&play(current+1));
+  audio.addEventListener("ended",playRandomNext);
   audio.addEventListener("error",()=>{setPlaying(false);const err=audio.error;message.textContent=err?"Audio error ("+err.code+"). Try another track or reload the page.":"This file cannot be played. Please check your connection.";console.warn("Artemius Radio audio element error:",err);});
   function render(){
     count.textContent=tracks.length+" TRACK"+(tracks.length>1?"S":"");
