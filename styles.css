@@ -400,3 +400,9 @@ main{max-width:none!important}
  .filter-row{display:none!important}
  .section-index{font-size:10px!important}
 }
+
+
+/* Use original uploaded panorama without cropping or recreating it */
+.hero.hero-banner { padding:0!important; margin:0!important; width:100%!important; max-width:none!important; }
+.hero-banner img { display:block!important; width:100%!important; height:auto!important; max-height:none!important; object-fit:contain!important; border:0!important; border-radius:0!important; box-shadow:none!important; }
+.brand-logo { object-fit:contain; }
