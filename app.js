@@ -40,7 +40,6 @@
     cover.src = t.cover_url || "assets/cover-placeholder.svg";
     document.querySelectorAll(".track-row").forEach((el, i) => el.classList.toggle("current", i === current));
     message.textContent = "Loading track…";
-    audio.load();
     const attempt = audio.play();
     if (attempt && typeof attempt.then === "function") {
       attempt.then(() => {
@@ -84,13 +83,19 @@
   });
   document.getElementById("prev-track").addEventListener("click",()=>tracks.length&&play(current<=0?tracks.length-1:current-1));
   document.getElementById("next-track").addEventListener("click",()=>tracks.length&&play(current+1));
-  if (allTracksBtn) allTracksBtn.addEventListener("click", () => {
-    allTracksBtn.classList.add("active");
-    allTracksBtn.setAttribute("aria-pressed", "true");
-    document.getElementById("library").scrollIntoView({ behavior: "smooth", block: "start" });
-    allTracksBtn.textContent = "All tracks ✓";
-    window.setTimeout(() => { allTracksBtn.textContent = "All tracks"; }, 1200);
-  });
+  if (allTracksBtn) {
+    allTracksBtn.addEventListener("click", () => {
+      allTracksBtn.classList.add("active");
+      allTracksBtn.setAttribute("aria-pressed", "true");
+      const library = document.getElementById("library");
+      library.scrollIntoView({ behavior: "auto", block: "start" });
+      list.classList.remove("tracks-highlight");
+      void list.offsetWidth;
+      list.classList.add("tracks-highlight");
+      allTracksBtn.textContent = "Showing all tracks ✓";
+      window.setTimeout(() => { allTracksBtn.textContent = "All tracks"; list.classList.remove("tracks-highlight"); }, 1800);
+    });
+  }
   audio.addEventListener("timeupdate",()=>{seek.value=audio.duration?audio.currentTime/audio.duration*100:0;document.getElementById("current-time").textContent=fmt(audio.currentTime);document.getElementById("duration").textContent=fmt(audio.duration);});
   seek.addEventListener("input",()=>{if(audio.duration)audio.currentTime=Number(seek.value)/100*audio.duration;});
   audio.addEventListener("playing",()=>{setPlaying(true);message.textContent="Now playing";});
