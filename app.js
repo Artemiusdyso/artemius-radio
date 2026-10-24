@@ -15,7 +15,13 @@
   document.getElementById("year").textContent = new Date().getFullYear();
   audio.volume = Number(volume.value);
   volume.addEventListener("input", () => audio.volume = Number(volume.value));
-  function setPlaying(playing){playBtn.textContent=playing?"Ⅱ":"▶";playBtn.setAttribute("aria-label",playing?"Pause":"Lecture");}
+  function setPlaying(playing){
+    playBtn.textContent=playing?"Ⅱ":"▶";
+    playBtn.setAttribute("aria-label",playing?"Pause":"Lecture");
+    const card=document.querySelector(".player-card");
+    if(card) card.classList.toggle("is-playing",playing);
+    document.body.classList.toggle("radio-playing",playing);
+  }
   async function play(index){
     if (!tracks.length) { message.textContent="La bibliothèque sera disponible après la configuration du Studio."; return; }
     current=(index+tracks.length)%tracks.length; const t=tracks[current];
@@ -53,3 +59,15 @@
   }
   render(); load();
 })();
+
+  // Subtle cinematic interaction: gentle pointer glow, reduced-motion aware.
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const playerCard = document.querySelector(".player-card");
+    if (playerCard) {
+      playerCard.addEventListener("pointermove", event => {
+        const rect = playerCard.getBoundingClientRect();
+        playerCard.style.setProperty("--pointer-x", ((event.clientX - rect.left) / rect.width * 100) + "%");
+        playerCard.style.setProperty("--pointer-y", ((event.clientY - rect.top) / rect.height * 100) + "%");
+      });
+    }
+  }
