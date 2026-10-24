@@ -155,3 +155,7 @@ main{max-width:none!important}
 
 @keyframes tracksPulse{0%{filter:brightness(1)}40%{filter:brightness(1.35)}100%{filter:brightness(1)}}
 .track-list.tracks-highlight .track-row{animation:tracksPulse .8s ease-in-out 2}
+
+
+/* Keep the library hidden until the All tracks button is tapped. */
+.library-hidden-until-open{display:none!important}
