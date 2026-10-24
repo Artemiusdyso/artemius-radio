@@ -115,7 +115,19 @@
   }
   function playTrack(i){play(i);}
   async function load(){
-    if(!cfg.supabaseUrl||!cfg.supabaseAnonKey||!window.supabase){message.textContent="The player is ready. The database still needs to be connected.";return;}
+    if(!cfg.supabaseUrl||!cfg.supabaseAnonKey){message.textContent="Radio configuration is missing.";return;}
+    if(!window.supabase){
+      message.textContent="Connecting to the audio library…";
+      if(!window.__artemiusSupabaseLoading){
+        window.__artemiusSupabaseLoading=true;
+        const script=document.createElement("script");
+        script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+        script.onload=()=>{window.__artemiusSupabaseLoading=false;load();};
+        script.onerror=()=>{window.__artemiusSupabaseLoading=false;message.textContent="Audio library unavailable. Check your connection and reload.";};
+        document.head.appendChild(script);
+      }
+      return;
+    }
     supabase=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
     const {data,error}=await supabase.from("radio_tracks").select("id,title,artist,genre,audio_path,cover_path,duration_seconds,created_at").eq("is_published",true).order("sort_order",{ascending:true}).order("created_at",{ascending:false});
     if(error){console.error(error);message.textContent="The library is temporarily unavailable.";return;}
