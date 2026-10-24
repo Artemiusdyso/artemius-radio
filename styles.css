@@ -65,3 +65,45 @@ main{max-width:none!important}
 @media(max-width:900px){.player-section{width:calc(100% - 28px);margin-top:0}.player-card{grid-template-columns:64px minmax(0,1fr);gap:12px;padding:10px;min-height:0}.cover-wrap{width:64px;height:64px}.player-main{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto auto;row-gap:0}.player-main h3{grid-column:1;grid-row:1;font-size:18px}.player-main>p{grid-column:1;grid-row:2;font-size:13px}.progress-row{grid-column:1;grid-row:3;gap:5px;font-size:9px}.player-controls{grid-column:1;grid-row:4;justify-content:flex-start;gap:14px;margin-top:9px}.play-btn{width:43px;height:43px;font-size:18px}.volume-control{margin-left:auto;width:100px}.library-section{width:calc(100% - 32px);padding-top:2px!important}.track-row{grid-template-columns:46px minmax(0,1fr) 35px;gap:10px;min-height:58px;padding:6px 8px}.track-thumb{width:46px;height:44px}.track-tag{display:none}.track-info strong{font-size:17px}.track-info span{font-size:13px}.section-index{font-size:9px}}
 @media(max-width:480px){.hero-banner img{width:100%;height:auto}.library-section .section-heading h2{font-size:27px}.library-section .muted{font-size:13px}.filter-row{padding-top:5px}.track-info strong{font-size:16px}.player-controls{gap:10px}.volume-control{width:72px}.control-btn{font-size:14px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+
+/* Final transparency pass — match the supplied reference */
+.player-card {
+  background: linear-gradient(105deg, rgba(30, 17, 49, .52), rgba(5, 13, 28, .48) 55%, rgba(3, 21, 33, .52)) !important;
+  border-color: rgba(166, 103, 255, .34) !important;
+  backdrop-filter: blur(10px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
+}
+.player-card:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at var(--pointer-x, 45%) var(--pointer-y, 50%), rgba(175, 107, 255, .10), transparent 48%);
+}
+.player-card { position: relative; overflow: hidden; }
+.player-main, .cover-wrap { position: relative; z-index: 1; }
+.track-row {
+  background: linear-gradient(100deg, rgba(37, 26, 65, .54), rgba(10, 17, 36, .46) 64%, rgba(4, 22, 34, .52)) !important;
+  border-color: rgba(139, 87, 226, .34) !important;
+  backdrop-filter: blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(130%) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.035) !important;
+}
+.track-row:before {
+  background: linear-gradient(100deg, rgba(125, 57, 197, .54), rgba(69, 43, 121, .31) 50%, rgba(5, 36, 48, .35)) !important;
+}
+.track-row.current {
+  background: linear-gradient(100deg, rgba(103, 52, 163, .70), rgba(42, 31, 79, .55) 50%, rgba(4, 28, 40, .60)) !important;
+  border-color: rgba(196, 130, 255, .86) !important;
+  box-shadow: 0 0 0 1px rgba(190,119,255,.19), 0 0 24px rgba(151,71,255,.25), inset 0 1px rgba(255,255,255,.10) !important;
+}
+.filter-chip {
+  background: linear-gradient(110deg, rgba(74,34,112,.20), rgba(10,16,35,.25)) !important;
+  backdrop-filter: blur(12px) !important;
+}
+@media (max-width: 900px) {
+  .player-card { background: linear-gradient(105deg, rgba(30,17,49,.64), rgba(5,13,28,.62) 55%, rgba(3,21,33,.64)) !important; }
+  .track-row { background: linear-gradient(100deg, rgba(37,26,65,.68), rgba(10,17,36,.62) 64%, rgba(4,22,34,.68)) !important; }
+}
