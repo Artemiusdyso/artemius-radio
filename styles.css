@@ -159,3 +159,9 @@ main{max-width:none!important}
 
 /* Keep the library hidden until the All tracks button is tapped. */
 .library-hidden-until-open{display:none!important}
+
+
+/* The library toggle stays visible while the library itself is hidden. */
+.library-entry{width:calc(100% - 11.4%);max-width:1680px;margin:0 auto}
+@media(max-width:900px){.library-entry{width:calc(100% - 32px)}}
+@media(max-width:480px){.library-entry{width:calc(100% - 20px)}}
