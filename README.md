@@ -2,28 +2,35 @@
 
 Independent static front end + Supabase database/auth/storage. Built with HTML, CSS and vanilla JavaScript.
 
-## Safety / repository isolation
+## Current setup
 
-This implementation is placed in `radio/` on the `artemius-radio-build` branch of `Artemiusdyso/artemius`. It does not replace or edit the existing root pages. It is not live until the branch is merged and GitHub Pages is configured. To make a truly independent GitHub Pages site, create a new repository named `artemius-radio` and copy the contents of this folder to its root (the GitHub integration available here does not expose a create-repository action).
+- GitHub repository: `Artemiusdyso/artemius-radio`
+- Supabase project: `Artemius Radio` (`cflecltrnyqugnmsvfke`), region `eu-west-1`
+- Database tables and row-level security: installed
+- Storage buckets: `radio-audio` and `radio-covers`
+- Browser config: connected using the public publishable key
+- GitHub Pages workflow: `.github/workflows/pages.yml`
 
-## Supabase setup
+The existing `Artemius shop` Supabase project and original `artemius` website have not been changed.
 
-1. Create a NEW Supabase project for Artemius Radio. Do not reuse the existing Artemius shop project.
-2. In SQL Editor, run `supabase/schema.sql`.
-3. In Authentication, create your owner account (disable public sign-ups afterwards if available).
-4. Copy the UUID for that user from Authentication > Users.
-5. Run `insert into public.radio_admins (user_id) values ('YOUR_AUTH_USER_UUID');` after replacing the placeholder.
-6. Get the project URL and publishable key. Put them in `config.js` as `supabaseUrl` and `supabaseAnonKey`. Only the publishable/anon key belongs in browser code; never expose a service-role or secret key.
-7. Configure Supabase Auth URL allow-list for the final site URL and `admin.html`.
-8. Deploy the site, then test login, upload, public playback, and deletion.
+## Final launch steps
+
+1. In GitHub, open Settings > Pages for this repository and select **GitHub Actions** as the build/deployment source.
+2. In Supabase Authentication > Users, create the owner account using your chosen email and a strong password. Do not share the password in chat.
+3. Copy that account's UUID from Authentication > Users.
+4. In Supabase SQL Editor, run the following after replacing the placeholder with that UUID:
+   `insert into public.radio_admins (user_id) values ('YOUR_AUTH_USER_UUID');`
+5. In Supabase Authentication > URL Configuration, set the Site URL to the final GitHub Pages URL and add that URL to Redirect URLs.
+6. Open the deployed `admin.html`, sign in, and upload a test MP3.
+
+Do not put a Supabase service-role key or secret key into GitHub. The public publishable key in `config.js` is designed for browser use; row-level security restricts changes to authorized radio admins.
 
 ## Upload workflow
 
-The Studio at `admin.html` accepts MP3 files up to 50 MB and optional JPG/PNG/WebP cover art up to 8 MB. Audio files are stored in Supabase Storage, not GitHub. Tracks remain private from the public listing until published; the audio bucket is public because this is a public radio, so anyone who obtains an audio URL can listen.
+The Studio at `admin.html` accepts MP3 files up to 50 MB and optional JPG/PNG/WebP cover art up to 8 MB. Audio files are stored in Supabase Storage, not GitHub. The public audio bucket allows listening by anyone who has the audio URL; publish/unpublish controls the public track listing.
 
 ## Important limitations
 
 - This is an on-demand public music library/player, not yet a 24/7 continuous radio server or live broadcasting console. AutoDJ and live radio require a compatible streaming service/encoder.
-- Public MP3 streaming uses storage bandwidth. Free-tier limits apply and heavy listening may require paid bandwidth.
-- This code intentionally does not include Supabase secrets.
+- The project creation quote was $0/month. Supabase free-tier quotas still apply, and heavy storage/bandwidth use may require a paid plan. No paid add-ons were selected.
 - Before public broadcasting, confirm music, recording, sample and voice rights plus any applicable Belgian obligations.
