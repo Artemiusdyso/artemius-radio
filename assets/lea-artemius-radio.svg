@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+<title id="title">Léa &amp; Artemius — univers sonore</title><desc id="desc">Monogramme doré et planète turquoise sur fond spatial bleu nuit.</desc>
+<defs>
+ <radialGradient id="bg"><stop stop-color="#102d39"/><stop offset=".55" stop-color="#07131f"/><stop offset="1" stop-color="#05070d"/></radialGradient>
+ <radialGradient id="planet" cx=".28" cy=".22" r=".85"><stop stop-color="#9dffe8"/><stop offset=".18" stop-color="#42cbb9"/><stop offset=".52" stop-color="#116b76"/><stop offset=".78" stop-color="#092d3c"/><stop offset="1" stop-color="#030910"/></radialGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0c8"/><stop offset=".3" stop-color="#b98b52"/><stop offset=".58" stop-color="#fff0cf"/><stop offset="1" stop-color="#7d532c"/></linearGradient>
+ <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a3fff1" stop-opacity=".1"/><stop offset=".48" stop-color="#6ae9e2"/><stop offset=".72" stop-color="#d7b78b"/><stop offset="1" stop-color="#a3fff1" stop-opacity=".12"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="9"/></filter>
+ <clipPath id="clip"><circle cx="830" cy="320" r="165"/></clipPath>
+</defs>
+<rect width="1200" height="720" rx="22" fill="url(#bg)"/>
+<g fill="#c8e8ff" opacity=".8">
+ <circle cx="80" cy="85" r="1.8"/><circle cx="155" cy="200" r="1.2"/><circle cx="310" cy="78" r="1.4"/><circle cx="490" cy="125" r="1.6"/><circle cx="1100" cy="115" r="1.8"/><circle cx="1050" cy="540" r="1.4"/><circle cx="680" cy="620" r="1.2"/><circle cx="90" cy="570" r="1.7"/><circle cx="1140" cy="360" r="1.1"/><circle cx="630" cy="80" r="1.2"/>
+</g>
+<path d="M0 600 Q300 530 600 620 T1200 570 V720 H0Z" fill="#08141e"/><path d="M0 600 Q300 530 600 620 T1200 570" fill="none" stroke="#2a8794" stroke-width="2" opacity=".7"/>
+<g fill="none" stroke="url(#ring)">
+ <ellipse cx="830" cy="320" rx="300" ry="92" transform="rotate(-23 830 320)" stroke-width="2"/>
+ <ellipse cx="830" cy="320" rx="270" ry="155" transform="rotate(31 830 320)" stroke-width="1.5" opacity=".75"/>
+ <ellipse cx="830" cy="320" rx="220" ry="190" transform="rotate(-7 830 320)" stroke-dasharray="3 10" opacity=".65"/>
+</g>
+<circle cx="830" cy="320" r="175" fill="#39d6c2" opacity=".13" filter="url(#glow)"/>
+<circle cx="830" cy="320" r="165" fill="url(#planet)"/>
+<g clip-path="url(#clip)" fill="none" stroke="#8cf9e8" opacity=".45">
+ <path d="M630 320 Q810 245 1020 282" stroke-width="2"/><path d="M635 360 Q810 285 1024 320" stroke-width="1.2"/><path d="M665 408 Q840 342 1010 367" stroke-width="1"/>
+</g>
+<circle cx="1050" cy="130" r="13" fill="#b9a7ff"/><circle cx="1050" cy="130" r="26" fill="#a18aff" opacity=".2" filter="url(#glow)"/>
+<g transform="translate(95 130)">
+ <path d="M185 20 C75 15 30 90 32 185 C34 285 106 340 210 330 C125 300 90 240 91 175 C91 103 121 53 185 20Z" fill="url(#gold)"/>
+ <path d="M108 70 L195 18 L290 300 L252 300 L191 110 L135 300 L96 300 L166 89Z" fill="url(#gold)" opacity=".98"/>
+ <path d="M245 85 C310 90 325 135 318 195 C312 250 285 278 248 290" fill="none" stroke="url(#gold)" stroke-width="2"/>
+ <path d="M192 -5 V28 M192 300 V345" stroke="url(#gold)" stroke-width="1.2"/><circle cx="192" cy="-13" r="4" fill="#caa06b"/><circle cx="192" cy="354" r="4" fill="#caa06b"/>
+ <path d="M192 132 L200 160 L228 168 L200 176 L192 204 L184 176 L156 168 L184 160Z" fill="url(#gold)"/>
+</g>
+<text x="98" y="555" fill="#f5e4c7" font-family="Georgia,serif" font-size="43" letter-spacing="8">LÉA &amp; ARTEMIUS</text>
+<path d="M220 585 H450 M500 585 H730" stroke="url(#gold)" stroke-width="1.5"/><path d="M475 566 L483 585 L475 604 L467 585Z" fill="url(#gold)"/>
+<text x="100" y="645" fill="#83dcd7" font-family="Arial,sans-serif" font-size="12" letter-spacing="4">SOUND BEYOND THE VISIBLE</text>
+</svg>
