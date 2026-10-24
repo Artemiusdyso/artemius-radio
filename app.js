@@ -1,0 +1,55 @@
+(() => {
+  const cfg = window.ARTEMIUS_RADIO_CONFIG || {};
+  const audio = document.getElementById("audio-player");
+  const playBtn = document.getElementById("play-toggle");
+  const seek = document.getElementById("seek");
+  const volume = document.getElementById("volume");
+  const title = document.getElementById("now-title");
+  const artist = document.getElementById("now-artist");
+  const cover = document.getElementById("now-cover");
+  const message = document.getElementById("player-message");
+  const list = document.getElementById("track-list");
+  const count = document.getElementById("track-count");
+  const fmt = s => { if (!Number.isFinite(s)) return "00:00"; const m=Math.floor(s/60); return String(m).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0"); };
+  let tracks = [], current = -1, supabase = null;
+  document.getElementById("year").textContent = new Date().getFullYear();
+  audio.volume = Number(volume.value);
+  volume.addEventListener("input", () => audio.volume = Number(volume.value));
+  function setPlaying(playing){playBtn.textContent=playing?"Ⅱ":"▶";playBtn.setAttribute("aria-label",playing?"Pause":"Lecture");}
+  async function play(index){
+    if (!tracks.length) { message.textContent="La bibliothèque sera disponible après la configuration du Studio."; return; }
+    current=(index+tracks.length)%tracks.length; const t=tracks[current];
+    audio.src=t.audio_url; title.textContent=t.title; artist.textContent=t.artist||"Artemius Radio"; cover.src=t.cover_url||"assets/cover-placeholder.svg";
+    document.querySelectorAll(".track-row").forEach((el,i)=>el.classList.toggle("current",i===current));
+    message.textContent="Chargement du morceau…";
+    try { await audio.play(); setPlaying(true); message.textContent="Lecture en cours"; } catch(e) { setPlaying(false); message.textContent="Appuie sur Lecture pour démarrer l’écoute."; }
+  }
+  playBtn.addEventListener("click",()=>{if(audio.paused){if(current<0){play(0)}else{audio.play().then(()=>setPlaying(true)).catch(()=>message.textContent="Impossible de lire ce fichier.");}}else{audio.pause();setPlaying(false);}});
+  document.getElementById("prev-track").addEventListener("click",()=>tracks.length&&play(current<=0?tracks.length-1:current-1));
+  document.getElementById("next-track").addEventListener("click",()=>tracks.length&&play(current+1));
+  audio.addEventListener("timeupdate",()=>{seek.value=audio.duration?audio.currentTime/audio.duration*100:0;document.getElementById("current-time").textContent=fmt(audio.currentTime);document.getElementById("duration").textContent=fmt(audio.duration);});
+  seek.addEventListener("input",()=>{if(audio.duration)audio.currentTime=Number(seek.value)/100*audio.duration;});
+  audio.addEventListener("ended",()=>tracks.length&&play(current+1));
+  audio.addEventListener("error",()=>{setPlaying(false);message.textContent="Ce fichier ne peut pas être lu. Vérifie son stockage.";});
+  function render(){
+    count.textContent=tracks.length+" TITRE"+(tracks.length>1?"S":"");
+    if(!tracks.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">♫</div><h3>Le silence avant la première note.</h3><p>Ajoute tes morceaux depuis le Studio d’administration. Ils apparaîtront ici dès qu’ils seront publiés.</p></div>';return;}
+    list.innerHTML="";
+    tracks.forEach((t,i)=>{const row=document.createElement("button");row.type="button";row.className="track-row";row.setAttribute("aria-label","Écouter "+t.title);
+      const img=document.createElement("img");img.className="track-thumb";img.src=t.cover_url||"assets/cover-placeholder.svg";img.alt="";
+      const info=document.createElement("span");info.className="track-info";const strong=document.createElement("strong");strong.textContent=t.title;const sub=document.createElement("span");sub.textContent=t.artist||"Artemius";info.append(strong,sub);
+      const tag=document.createElement("span");tag.className="track-tag";tag.textContent=t.genre||"ORIGINAL";
+      const play=document.createElement("span");play.className="track-play";play.textContent="▶";play.setAttribute("aria-hidden","true");row.append(img,info,tag,play);row.addEventListener("click",()=>playTrack(i));list.append(row);
+    });
+  }
+  function playTrack(i){play(i);}
+  async function load(){
+    if(!cfg.supabaseUrl||!cfg.supabaseAnonKey||!window.supabase){message.textContent="Le lecteur est prêt. La base de données reste à connecter.";return;}
+    supabase=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
+    const {data,error}=await supabase.from("radio_tracks").select("id,title,artist,genre,audio_path,cover_path,duration_seconds,created_at").eq("is_published",true).order("sort_order",{ascending:true}).order("created_at",{ascending:false});
+    if(error){console.error(error);message.textContent="Connexion à la bibliothèque impossible pour le moment.";return;}
+    tracks=(data||[]).map(t=>({...t,audio_url:supabase.storage.from(cfg.audioBucket||"radio-audio").getPublicUrl(t.audio_path).data.publicUrl,cover_url:t.cover_path?supabase.storage.from(cfg.coversBucket||"radio-covers").getPublicUrl(t.cover_path).data.publicUrl:null}));
+    render(); message.textContent=tracks.length?"Prêt à diffuser tes créations.":"Le Studio n’a pas encore publié de morceau.";
+  }
+  render(); load();
+})();
