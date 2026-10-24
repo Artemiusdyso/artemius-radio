@@ -152,3 +152,6 @@ main{max-width:none!important}
   .track-info strong{font-size:16px}
   .track-info span{font-size:12px}
 }
+
+@keyframes tracksPulse{0%{filter:brightness(1)}40%{filter:brightness(1.35)}100%{filter:brightness(1)}}
+.track-list.tracks-highlight .track-row{animation:tracksPulse .8s ease-in-out 2}
