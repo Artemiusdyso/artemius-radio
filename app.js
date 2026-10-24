@@ -11,6 +11,8 @@
   const list = document.getElementById("track-list");
   const count = document.getElementById("track-count");
   const allTracksBtn = document.getElementById("all-tracks");
+  const library = document.getElementById("library");
+  library.classList.add("library-hidden-until-open");
   const fmt = s => { if (!Number.isFinite(s)) return "00:00"; const m=Math.floor(s/60); return String(m).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0"); };
   let tracks = [], current = -1, supabase = null;
   document.getElementById("year").textContent = new Date().getFullYear();
@@ -90,7 +92,7 @@
     allTracksBtn.addEventListener("click", () => {
       allTracksBtn.classList.add("active");
       allTracksBtn.setAttribute("aria-pressed", "true");
-      const library = document.getElementById("library");
+      library.classList.remove("library-hidden-until-open");
       library.scrollIntoView({ behavior: "auto", block: "start" });
       list.classList.remove("tracks-highlight");
       void list.offsetWidth;
