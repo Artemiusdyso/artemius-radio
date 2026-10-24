@@ -35,7 +35,7 @@
  async function loadTracks(){
    const {data,error}=await client.from("radio_tracks").select("id,title,artist,genre,audio_path,cover_path,is_published,created_at").order("sort_order",{ascending:true}).order("created_at",{ascending:false});
    const container=$("admin-track-list");if(error){container.textContent="Unable to load tracks: "+error.message;return;}
-   $("admin-track-count").textContent=(data||[]).length+" TITRE"+((data||[]).length>1?"S":"");container.innerHTML="";
+   $("admin-track-count").textContent=(data||[]).length+" TRACK"+((data||[]).length>1?"S":"");container.innerHTML="";
    if(!data||!data.length){container.innerHTML='<p class="muted">No tracks uploaded yet.</p>';return;}
    data.forEach(t=>{const row=document.createElement("div");row.className="admin-track";const img=document.createElement("img");img.src=t.cover_path?client.storage.from(cfg.coversBucket||"radio-covers").getPublicUrl(t.cover_path).data.publicUrl:"assets/cover-placeholder.svg";img.alt="";const info=document.createElement("span");info.className="track-info";const strong=document.createElement("strong");strong.textContent=t.title;const sub=document.createElement("span");sub.textContent=(t.artist||"Artemius")+" · "+(t.is_published?"Published":"Draft");info.append(strong,sub);const btn=document.createElement("button");btn.type="button";btn.textContent="Delete";btn.addEventListener("click",()=>removeTrack(t));row.append(img,info,btn);container.append(row);});
  }
