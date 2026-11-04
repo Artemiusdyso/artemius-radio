@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080b12">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Statistiques privées — Artemius Radio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="stats.css">
+</head>
+<body class="stats-page">
+  <header class="stats-header">
+    <a class="back-link" href="admin.html">← Retour au Studio</a>
+    <div class="stats-brand">ARTEMIUS <span>RADIO</span> <small>PRIVATE ANALYTICS</small></div>
+    <div class="header-actions">
+      <button id="refresh-button" type="button" hidden>Actualiser ↻</button>
+      <button id="logout-button" type="button" hidden>Déconnexion</button>
+    </div>
+  </header>
+
+  <main class="stats-main">
+    <section id="login-panel" class="login-panel">
+      <p class="eyebrow">ACCÈS RÉSERVÉ À L'ADMINISTRATEUR</p>
+      <h1>Statistiques<span>.</span></h1>
+      <p class="intro">Connecte-toi avec le même compte que celui utilisé pour le Studio Artemius Radio.</p>
+      <form id="login-form">
+        <label for="email">Adresse e-mail</label>
+        <input id="email" type="email" autocomplete="username" required placeholder="Adresse e-mail du Studio">
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" autocomplete="current-password" required placeholder="Mot de passe">
+        <button class="primary-button" type="submit">Se connecter <span>→</span></button>
+        <p id="login-message" class="form-message" role="status"></p>
+      </form>
+      <p class="small-note">Les données statistiques ne sont accessibles qu'aux comptes autorisés dans Supabase.</p>
+    </section>
+
+    <section id="dashboard" hidden>
+      <div class="dashboard-heading">
+        <div><p class="eyebrow">VUE D'ENSEMBLE</p><h1>Artemius Radio<span>.</span></h1><p class="intro">Activité des auditeurs et performances d'écoute.</p></div>
+        <p id="last-updated" class="last-updated">Données non chargées</p>
+      </div>
+
+      <div class="metric-grid">
+        <article class="metric-card"><span>Écoutes démarrées</span><strong id="total-plays">—</strong><small>Lectures lancées</small></article>
+        <article class="metric-card"><span>Écoutes qualifiées</span><strong id="qualified-plays">—</strong><small>Au moins 30 secondes</small></article>
+        <article class="metric-card"><span>Temps total d'écoute</span><strong id="listening-time">—</strong><small id="average-time">Moyenne par écoute : —</small></article>
+        <article class="metric-card"><span>En direct</span><strong id="active-listeners">—</strong><small>Signal reçu dans les 45 dernières secondes</small></article>
+      </div>
+
+      <div class="content-grid">
+        <section class="data-panel daily-panel">
+          <div class="panel-heading"><div><p class="eyebrow">30 DERNIERS JOURS</p><h2>Évolution des écoutes</h2></div></div>
+          <div id="daily-chart" class="daily-chart"><p class="muted">Aucune donnée pour le moment.</p></div>
+        </section>
+        <section class="data-panel">
+          <div class="panel-heading"><div><p class="eyebrow">AUDIENCE</p><h2>Pays des auditeurs</h2></div><strong id="country-count" class="panel-count">—</strong></div>
+          <div id="country-list" class="ranking-list"><p class="muted">Aucune donnée pour le moment.</p></div>
+          <p class="panel-footnote">Le pays est approximatif et dépend des informations transmises par le réseau. Il peut être inconnu.</p>
+        </section>
+        <section class="data-panel tracks-panel">
+          <div class="panel-heading"><div><p class="eyebrow">MUSIQUE</p><h2>Morceaux les plus écoutés</h2></div></div>
+          <div id="track-list" class="ranking-list"><p class="muted">Aucune donnée pour le moment.</p></div>
+        </section>
+      </div>
+      <p id="dashboard-message" class="dashboard-message" role="status"></p>
+      <p class="privacy-reminder">Statistiques collectées uniquement après acceptation du visiteur. Aucun nom, e-mail ou adresse IP n'est enregistré dans la base des statistiques.</p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.95.0"></script>
+  <script src="config.js"></script>
+  <script src="stats.js"></script>
+</body>
+</html>
