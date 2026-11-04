@@ -17,6 +17,10 @@
   let tracks = [], current = -1, supabase = null;
 
   const analyticsConsentKey = "artemius_radio_analytics_consent_v1";
+  const analyticsParams = new URLSearchParams(window.location.search);
+  if (analyticsParams.get("analytics") === "setup") {
+    try { window.localStorage.removeItem(analyticsConsentKey); } catch (_) {}
+  }
   let analyticsConsent = false;
   let analyticsSessionId = null, analyticsTrackId = null, analyticsIsPlaying = false, analyticsHeartbeat = null;
   let analyticsStoredChoice = null;
@@ -26,11 +30,30 @@
   } catch (_) {}
 
   function analyticsRequest(action, sessionId, trackId) {
-    if (!analyticsConsent || !supabase || !sessionId) return;
-    supabase.functions.invoke("radio-analytics", {
-      body: { action: action, sessionId: sessionId, trackId: trackId || null }
-    }).then(({ error }) => {
-      if (error) console.warn("Artemius Radio analytics:", error.message);
+    if (!analyticsConsent || !cfg.supabaseUrl || !cfg.supabaseAnonKey || !sessionId) {
+      console.debug("Artemius Radio analytics skipped:", {
+        consent: analyticsConsent,
+        configured: !!(cfg.supabaseUrl && cfg.supabaseAnonKey),
+        action
+      });
+      return;
+    }
+    fetch(cfg.supabaseUrl + "/functions/v1/radio-analytics", {
+      method: "POST",
+      headers: {
+        "apikey": cfg.supabaseAnonKey,
+        "Authorization": "Bearer " + cfg.supabaseAnonKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ action, sessionId, trackId: trackId || null }),
+      keepalive: action === "stop" || action === "ended"
+    }).then(async response => {
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.ok === false) {
+        console.warn("Artemius Radio analytics response:", response.status, result);
+      } else {
+        console.debug("Artemius Radio analytics event recorded:", action);
+      }
     }).catch(error => console.warn("Artemius Radio analytics request failed:", error));
   }
 
