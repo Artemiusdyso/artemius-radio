@@ -165,3 +165,38 @@ main{max-width:none!important}
 .library-entry{width:calc(100% - 11.4%);max-width:1680px;margin:0 auto}
 @media(max-width:900px){.library-entry{width:calc(100% - 32px)}}
 @media(max-width:480px){.library-entry{width:calc(100% - 20px)}}
+
+
+/* Visible destination buttons below the radio player */
+.radio-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 14px auto 0;
+}
+.radio-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 11px 22px;
+  border: 1px solid rgba(190, 125, 255, .82);
+  border-radius: 999px;
+  background: linear-gradient(110deg, rgba(91, 45, 139, .58), rgba(12, 21, 42, .82));
+  color: #f5eaff;
+  font: 500 12px var(--display);
+  letter-spacing: .6px;
+  box-shadow: 0 0 18px rgba(164, 90, 255, .15), inset 0 1px rgba(255,255,255,.08);
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+}
+.radio-links a:hover {
+  transform: translateY(-2px);
+  border-color: #e2bdff;
+  box-shadow: 0 0 22px rgba(164, 90, 255, .32);
+}
+@media(max-width:480px) {
+  .radio-links { gap: 8px; margin-top: 11px; }
+  .radio-links a { flex: 1 1 140px; padding: 10px 12px; font-size: 10px; }
+}
