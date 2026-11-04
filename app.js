@@ -15,6 +15,131 @@
   library.classList.add("library-hidden-until-open");
   const fmt = s => { if (!Number.isFinite(s)) return "00:00"; const m=Math.floor(s/60); return String(m).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0"); };
   let tracks = [], current = -1, supabase = null;
+
+  const analyticsConsentKey = "artemius_radio_analytics_consent_v1";
+  let analyticsConsent = false;
+  let analyticsSessionId = null, analyticsTrackId = null, analyticsIsPlaying = false, analyticsHeartbeat = null;
+  let analyticsStoredChoice = null;
+  try {
+    analyticsStoredChoice = window.localStorage.getItem(analyticsConsentKey);
+    analyticsConsent = analyticsStoredChoice === "accepted";
+  } catch (_) {}
+
+  function analyticsRequest(action, sessionId, trackId) {
+    if (!analyticsConsent || !supabase || !sessionId) return;
+    supabase.functions.invoke("radio-analytics", {
+      body: { action: action, sessionId: sessionId, trackId: trackId || null }
+    }).then(({ error }) => {
+      if (error) console.warn("Artemius Radio analytics:", error.message);
+    }).catch(error => console.warn("Artemius Radio analytics request failed:", error));
+  }
+
+  function clearAnalyticsHeartbeat() {
+    if (analyticsHeartbeat) window.clearInterval(analyticsHeartbeat);
+    analyticsHeartbeat = null;
+  }
+
+  function beginAnalytics() {
+    if (!analyticsConsent || !supabase || current < 0 || !tracks[current]) return;
+    const track = tracks[current];
+    if (!track.id) return;
+
+    if (analyticsSessionId && analyticsTrackId === track.id) {
+      if (!analyticsIsPlaying) {
+        analyticsIsPlaying = true;
+        analyticsRequest("resume", analyticsSessionId, analyticsTrackId);
+      }
+    } else {
+      if (analyticsSessionId) finishAnalytics("stop");
+      analyticsSessionId = crypto.randomUUID();
+      analyticsTrackId = track.id;
+      analyticsIsPlaying = true;
+      analyticsRequest("start", analyticsSessionId, analyticsTrackId);
+    }
+
+    if (!analyticsHeartbeat) {
+      analyticsHeartbeat = window.setInterval(() => {
+        if (analyticsIsPlaying && !audio.paused) {
+          analyticsRequest("heartbeat", analyticsSessionId, analyticsTrackId);
+        }
+      }, 15000);
+    }
+  }
+
+  function pauseAnalytics() {
+    if (!analyticsSessionId || !analyticsIsPlaying) return;
+    analyticsIsPlaying = false;
+    clearAnalyticsHeartbeat();
+    analyticsRequest("pause", analyticsSessionId, analyticsTrackId);
+  }
+
+  function finishAnalytics(action) {
+    if (!analyticsSessionId) return;
+    const oldSessionId = analyticsSessionId;
+    const oldTrackId = analyticsTrackId;
+    analyticsSessionId = null;
+    analyticsTrackId = null;
+    analyticsIsPlaying = false;
+    clearAnalyticsHeartbeat();
+    analyticsRequest(action || "stop", oldSessionId, oldTrackId);
+  }
+
+  function sendAnalyticsOnPageExit() {
+    if (!analyticsConsent || !analyticsSessionId || !cfg.supabaseUrl || !cfg.supabaseAnonKey) return;
+    const payload = JSON.stringify({
+      action: "stop",
+      sessionId: analyticsSessionId,
+      trackId: analyticsTrackId
+    });
+    fetch(cfg.supabaseUrl + "/functions/v1/radio-analytics", {
+      method: "POST",
+      headers: {
+        "apikey": cfg.supabaseAnonKey,
+        "Authorization": "Bearer " + cfg.supabaseAnonKey,
+        "Content-Type": "application/json"
+      },
+      body: payload,
+      keepalive: true
+    }).catch(() => {});
+    analyticsSessionId = null;
+    analyticsTrackId = null;
+    analyticsIsPlaying = false;
+    clearAnalyticsHeartbeat();
+  }
+
+  function showAnalyticsConsent() {
+    if (analyticsStoredChoice === "accepted" || analyticsStoredChoice === "refused") return;
+    const banner = document.createElement("aside");
+    banner.className = "analytics-consent";
+    banner.setAttribute("aria-label", "Analytics consent");
+    banner.innerHTML =
+      '<div class="analytics-consent-copy"><strong>Help improve Artemius Radio</strong>' +
+      '<p>Allow anonymous listening statistics (listening time and approximate country). We do not save IP addresses in the analytics database.</p>' +
+      '<a href="privacy.html">Privacy details</a></div>' +
+      '<div class="analytics-consent-actions"><button type="button" class="analytics-accept">Accept</button>' +
+      '<button type="button" class="analytics-refuse">Refuse</button></div>';
+    document.body.appendChild(banner);
+
+    function choose(accepted) {
+      try {
+        window.localStorage.setItem(analyticsConsentKey, accepted ? "accepted" : "refused");
+      } catch (_) {}
+      analyticsStoredChoice = accepted ? "accepted" : "refused";
+      if (accepted) {
+        analyticsConsent = true;
+        if (!audio.paused) beginAnalytics();
+      } else {
+        if (analyticsSessionId) finishAnalytics("stop");
+        analyticsConsent = false;
+      }
+      banner.remove();
+    }
+    banner.querySelector(".analytics-accept").addEventListener("click", () => choose(true));
+    banner.querySelector(".analytics-refuse").addEventListener("click", () => choose(false));
+  }
+
+  showAnalyticsConsent();
+  window.addEventListener("pagehide", sendAnalyticsOnPageExit);
   document.getElementById("year").textContent = new Date().getFullYear();
   message.textContent = "Mobile diagnostic v5 loaded — connecting to library…";
   audio.volume = Number(volume.value);
@@ -36,6 +161,7 @@
     }
     current = (index + tracks.length) % tracks.length;
     const t = tracks[current];
+    finishAnalytics("stop");
     setPlaying(false);
     audio.pause();
     audio.src = t.audio_url;
@@ -65,6 +191,7 @@
     if (!audio.paused && !audio.ended) {
       audio.pause();
       setPlaying(false);
+      pauseAnalytics();
       message.textContent = "Playback paused";
       return;
     }
@@ -119,10 +246,11 @@
   }
   audio.addEventListener("timeupdate",()=>{seek.value=audio.duration?audio.currentTime/audio.duration*100:0;document.getElementById("current-time").textContent=fmt(audio.currentTime);document.getElementById("duration").textContent=fmt(audio.duration);});
   seek.addEventListener("input",()=>{if(audio.duration)audio.currentTime=Number(seek.value)/100*audio.duration;});
-  audio.addEventListener("playing",()=>{setPlaying(true);message.textContent="Now playing";});
+  audio.addEventListener("playing",()=>{setPlaying(true);message.textContent="Now playing";beginAnalytics();});
   audio.addEventListener("waiting",()=>{message.textContent="Buffering audio…";});
+  audio.addEventListener("ended",()=>finishAnalytics("ended"));
   audio.addEventListener("ended",playRandomNext);
-  audio.addEventListener("error",()=>{setPlaying(false);const err=audio.error;message.textContent=err?"Audio error ("+err.code+"). Try another track or reload the page.":"This file cannot be played. Please check your connection.";console.warn("Artemius Radio audio element error:",err);});
+  audio.addEventListener("error",()=>{finishAnalytics("stop");setPlaying(false);const err=audio.error;message.textContent=err?"Audio error ("+err.code+"). Try another track or reload the page.":"This file cannot be played. Please check your connection.";console.warn("Artemius Radio audio element error:",err);});
   function render(){
     count.textContent=tracks.length+" TRACK"+(tracks.length>1?"S":"");
     if(!tracks.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">♫</div><h3>The silence before the first note.</h3><p>Add tracks through the Admin Studio. They will appear here as soon as they are published.</p></div>';return;}
