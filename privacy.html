@@ -37,7 +37,7 @@
   <script>
     document.getElementById("change-choice").addEventListener("click", function () {
       try { localStorage.removeItem("artemius_radio_analytics_consent_v1"); } catch (e) {}
-      alert("Ton choix sera redemandé lors de ta prochaine visite sur la radio.");
+      window.location.href = "./?analytics=setup";
     });
   </script>
 </body>
