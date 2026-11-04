@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Confidentialité — Artemius Radio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="privacy.css">
+</head>
+<body>
+  <main class="privacy-page">
+    <a class="back-link" href="./">← Retour à Artemius Radio</a>
+    <p class="eyebrow">ARTEMIUS RADIO · PRIVACY</p>
+    <h1>Confidentialité<span>.</span></h1>
+    <section>
+      <h2>Statistiques d'écoute</h2>
+      <p>Les statistiques d'écoute sont facultatives. Elles ne sont activées que si tu choisis « Accept » sur le message affiché par le lecteur. Tu peux refuser : la radio continue de fonctionner normalement.</p>
+      <p>Lorsque tu acceptes, Artemius Radio enregistre un identifiant aléatoire limité à une session de lecture, le morceau lancé, la durée d'écoute mesurée pendant la lecture et, lorsque le réseau le fournit, un code pays approximatif. Aucun nom, adresse e-mail ou adresse IP n'est enregistré dans la base de statistiques.</p>
+      <p>Le pays peut ne pas être disponible. Aucune localisation précise n'est recherchée. L'identifiant aléatoire n'est pas utilisé pour suivre tes visites entre plusieurs sessions.</p>
+      <p>Les événements sont stockés dans une base privée et les statistiques détaillées ne sont accessibles qu'à l'administrateur authentifié de la radio. Les données anciennes de plus de 12 mois sont supprimées lors du traitement de nouvelles écoutes.</p>
+      <p>Le fonctionnement technique de l'hébergement et du réseau peut impliquer des traitements de connexion par les fournisseurs d'infrastructure, indépendamment de la base de statistiques d'Artemius Radio.</p>
+    </section>
+    <section>
+      <h2>Listening statistics — English</h2>
+      <p>Listening statistics are optional. They are enabled only when you choose “Accept” on the notice shown by the player. You can refuse and continue listening normally.</p>
+      <p>When enabled, Artemius Radio stores a random identifier for one playback session, the track played, listening time measured while playback is active and, when supplied by the network, an approximate country code. Names, email addresses and IP addresses are not stored in the radio analytics database.</p>
+      <p>The country may be unavailable. No precise location is collected. The random identifier is not used to follow you across separate visits.</p>
+      <p>Detailed statistics are stored privately and can only be viewed by an authenticated radio administrator. Records older than 12 months are deleted when new listening events are processed.</p>
+    </section>
+    <section class="choice-section">
+      <h2>Modifier ton choix</h2>
+      <p>Tu peux modifier ton choix de statistiques ici. La radio te redemandera ton accord à la prochaine ouverture.</p>
+      <button id="change-choice" type="button">Modifier mon choix de statistiques</button>
+    </section>
+  </main>
+  <script>
+    document.getElementById("change-choice").addEventListener("click", function () {
+      try { localStorage.removeItem("artemius_radio_analytics_consent_v1"); } catch (e) {}
+      alert("Ton choix sera redemandé lors de ta prochaine visite sur la radio.");
+    });
+  </script>
+</body>
+</html>
